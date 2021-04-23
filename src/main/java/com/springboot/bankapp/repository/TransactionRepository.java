@@ -13,7 +13,7 @@ import com.springboot.bankapp.entity.Transaction;
 public interface TransactionRepository extends JpaRepository<Transaction, Long>{
 	
 	@Query(
-			  value = "SELECT * FROM transactions where From_Account_No= :#{#no}", 
+			  value = "SELECT * FROM transactions where From_Account_No= :#{#no} order by Created_On desc limit 10", 
 			  nativeQuery = true)
 	List<Transaction> getLastTenTransactions(@Param("no") long no);
 
