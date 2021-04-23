@@ -30,7 +30,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/summary")
+	@GetMapping("/dashboard")
 	public ResponseEntity<Map<String, Object>> getUserInfo() {
 		User user=this.userService.findByUserId(1);
 		Map<String, Object> map = new HashMap<>();
