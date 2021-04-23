@@ -36,7 +36,7 @@ public class UserController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("User", user);
 		List<Long> all_accnts=new ArrayList<>();
-		user.getAccounts().forEach(account -> all_accnts.add(account.getAcctNo()));
+		user.getAccounts().forEach(account -> all_accnts.add(account.getId().getAcctNo()));
 		map.put("User Acounts", all_accnts);
 		return ResponseEntity.ok(map);
 	}

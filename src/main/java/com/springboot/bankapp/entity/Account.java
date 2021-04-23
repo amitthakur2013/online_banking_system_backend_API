@@ -3,13 +3,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,9 +23,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="account")
 public class Account implements Serializable{
 	
-	@Id
-	@Column(name = "Acct_No",nullable = false)
-	private long acctNo;
+	@EmbeddedId
+	private AccountNoUserId id;
 	
 	@Column(name="Acct_Type",nullable = false)
 	private String acctType;
@@ -36,7 +39,12 @@ public class Account implements Serializable{
 	@JoinColumn(name = "Branch_Id")
 	private Branch branch;
 	
-	@Id
+	@AttributeOverrides({
+		@AttributeOverride(name="acctNo",column = @Column(name="Acct_No")),
+		@AttributeOverride(name = "userId",column = @Column(name="User_Id"))
+	})
+	
+	@MapsId("userId")
 	@ManyToOne
 	@JoinColumn(name = "User_Id")
 	private User user;
@@ -46,14 +54,6 @@ public class Account implements Serializable{
 
 	public Account() {
 		
-	}
-
-	public long getAcctNo() {
-		return acctNo;
-	}
-
-	public void setAcctNo(long acctNo) {
-		this.acctNo = acctNo;
 	}
 
 	public String getAcctType() {
@@ -104,11 +104,18 @@ public class Account implements Serializable{
 		this.balance = balance;
 	}
 
+	public AccountNoUserId getId() {
+		return id;
+	}
+
+	public void setId(AccountNoUserId id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "Account [acctNo=" + acctNo + ", acctType=" + acctType + ", operationType=" + operationType
-				+ ", jointUserid=" + jointUserid + ", branch=" + branch + ", user=" + user + ", balance=" + balance
-				+ "]";
+		return "Account [id=" + id + ", acctType=" + acctType + ", operationType=" + operationType + ", jointUserid="
+				+ jointUserid + ", branch=" + branch + ", user=" + user + ", balance=" + balance + "]";
 	}
 	
 }
