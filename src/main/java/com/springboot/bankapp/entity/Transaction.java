@@ -34,6 +34,12 @@ public class Transaction implements Serializable{
 	
 	@Column(name="Avail_Bal",nullable = false)
 	private double availBal;
+	
+	@Column(name = "From_Account_No")
+	private long fromAccountNo;
+	
+	@Column(name="From_User_Id")
+	private int fromUserId;
 
 	@ManyToOne
 	@JoinColumn(name="To_Benif_Id", referencedColumnName = "Benif_Id")
@@ -106,14 +112,27 @@ public class Transaction implements Serializable{
 		this.benificiary = benificiary;
 	}
 
+	public long getFromAccountNo() {
+		return fromAccountNo;
+	}
+
+	public void setFromAccountNo(long fromAccountNo) {
+		this.fromAccountNo = fromAccountNo;
+	}
+
+	public int getFromUserId() {
+		return fromUserId;
+	}
+
+	public void setFromUserId(int fromUserId) {
+		this.fromUserId = fromUserId;
+	}
+
 	@Override
 	public String toString() {
 		return "Transaction [transId=" + transId + ", refNo=" + refNo + ", amount=" + amount + ", remark=" + remark
-				+ ", status=" + status + ", createdOn=" + createdOn + ", availBal=" + availBal + ", benificiary="
-				+ benificiary + "]";
+				+ ", status=" + status + ", createdOn=" + createdOn + ", availBal=" + availBal + ", fromAccountNo="
+				+ fromAccountNo + ", fromUserId=" + fromUserId + ", benificiary=" + benificiary + "]";
 	}
-
-	
-
 	
 }
