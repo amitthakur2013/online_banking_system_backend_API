@@ -162,19 +162,6 @@ public class User implements Serializable{
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender
 				+ ", email=" + email + ", phoneNo=" + phoneNo + ", address=" + address + ", dob=" + dob + ", loginPwd="
 				+ loginPwd + ", transPwd=" + transPwd + ", accounts=" + accounts + "]";
-	}
-
-	/*public List<Transaction> getTransactions() {
-		return transactions;
-	}
-
-	public void setTransactions(List<Transaction> transactions) {
-		this.transactions = transactions;
-	}*/
-
-	
-
-	
-	
+	}	
 	
 }
