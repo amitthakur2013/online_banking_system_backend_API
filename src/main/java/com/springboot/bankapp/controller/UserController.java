@@ -34,10 +34,10 @@ public class UserController {
 	public ResponseEntity<Map<String, Object>> getUserInfo() {
 		User user=this.userService.findByUserId(1);
 		Map<String, Object> map = new HashMap<>();
-		map.put("User", user);
-		List<Long> all_accnts=new ArrayList<>();
-		user.getAccounts().forEach(account -> all_accnts.add(account.getId().getAcctNo()));
-		map.put("User Acounts", all_accnts);
+		map.put("user", user);
+		List<Account> all_accnts=new ArrayList<>();
+		user.getAccounts().forEach(account -> all_accnts.add(account));
+		map.put("accounts", all_accnts);
 		return ResponseEntity.ok(map);
 	}
 	
