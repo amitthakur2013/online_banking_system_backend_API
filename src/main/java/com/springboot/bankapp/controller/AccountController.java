@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,13 +24,13 @@ public class AccountController {
 	@Autowired
 	private TransactionService transactionService;
 	
-	@GetMapping("/details")
-	public Account getAccountdetails() {
-		return this.accountService.getAccountDetails(100345676);
+	@GetMapping("/details/{id}")
+	public Account getAccountdetails(@PathVariable long id) {
+		return this.accountService.getAccountDetails(id);
 	}
 	
-	@GetMapping("/mini_statement")
-	public List<Transaction> getMiniStatement() {
-		return this.transactionService.getLastTenTransactions(100101102);
+	@GetMapping("/mini_statement/{id}")
+	public List<Transaction> getMiniStatement(@PathVariable long id) {
+		return this.transactionService.getLastTenTransactions(id);
 	}
 }
