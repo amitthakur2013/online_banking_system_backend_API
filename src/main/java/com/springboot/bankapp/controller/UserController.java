@@ -1,6 +1,7 @@
 package com.springboot.bankapp.controller;
 
 import java.net.http.HttpResponse;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +32,10 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/dashboard")
-	public ResponseEntity<Map<String, Object>> getUserInfo() {
-		User user=this.userService.findByUserId(1);
+	public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
+		String email=principal.getName();
+		//User user=this.userService.findByUserId(1);
+		User user=this.userService.findByEmailId(email);
 		Map<String, Object> map = new HashMap<>();
 		map.put("user", user);
 		List<Account> all_accnts=new ArrayList<>();
