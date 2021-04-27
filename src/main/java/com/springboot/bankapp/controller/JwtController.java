@@ -38,10 +38,12 @@ public class JwtController {
 			
 		} catch (UsernameNotFoundException e) {
 			e.printStackTrace();
-			//throw new Exception("Bad credentials");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			try {
+			throw new Exception("Bad credentials");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} 
 		
 		
 		// fine area
