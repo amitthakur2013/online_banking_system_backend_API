@@ -8,4 +8,5 @@ import com.springboot.bankapp.entity.User;
 public interface UserService {
 	User findByUserId(int userId);
 	User findByEmailId(String email);
+	User saveUserAfterBenef(User user);
 }

@@ -35,6 +35,7 @@ public class Account implements Serializable{
 	@Column(name="Joint_Userid")
 	private int jointUserid;
 	
+	
 	@ManyToOne
 	@JoinColumn(name = "Branch_Id")
 	private Branch branch;
@@ -44,6 +45,7 @@ public class Account implements Serializable{
 		@AttributeOverride(name = "userId",column = @Column(name="User_Id"))
 	})
 	
+	@JsonIgnore
 	@MapsId("userId")
 	@ManyToOne
 	@JoinColumn(name = "User_Id")

@@ -8,7 +8,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Benificiary implements Serializable{
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Benif_Id",nullable = false)
 	private long benifId;
 	
@@ -44,6 +48,11 @@ public class Benificiary implements Serializable{
             cascade = CascadeType.ALL)
 	@JsonIgnore
     List<Transaction> trans=new ArrayList<>();
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "benificiaryList",fetch= FetchType.LAZY)
+	List<User> userList=new ArrayList<>();
+	
 	
 	public Benificiary() {
 	
@@ -111,6 +120,33 @@ public class Benificiary implements Serializable{
 
 	public void setTrans(List<Transaction> trans) {
 		this.trans = trans;
+		
+		for(Transaction t:trans) {
+			t.setBenificiary(this);
+		}
+	}
+
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+	
+
+	public Benificiary(long benifId, String name, long accountNo, String bankName, String branchName, String ifscCode,
+			String nickname, List<Transaction> trans, List<User> userList) {
+		super();
+		this.benifId = benifId;
+		this.name = name;
+		this.accountNo = accountNo;
+		this.bankName = bankName;
+		this.branchName = branchName;
+		this.ifscCode = ifscCode;
+		this.nickname = nickname;
+		this.trans = trans;
+		this.userList = userList;
 	}
 
 	@Override

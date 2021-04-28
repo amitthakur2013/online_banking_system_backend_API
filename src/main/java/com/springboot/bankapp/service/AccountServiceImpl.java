@@ -28,4 +28,10 @@ public class AccountServiceImpl implements AccountService {
 		return accnt.get(0);
 	}
 
+	@Override
+	public Account updateAccount(Account acc) {
+		Account accnt=this.accountRepository.save(acc);
+		return accnt;
+	}
+
 }
