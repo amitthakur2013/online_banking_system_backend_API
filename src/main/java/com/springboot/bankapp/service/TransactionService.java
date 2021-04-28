@@ -9,5 +9,6 @@ import com.springboot.bankapp.entity.Transaction;
 @Service
 public interface TransactionService {
 	List<Transaction> getLastTenTransactions(long accno);
+	Transaction saveTransaction(Transaction transaction);
 
 }

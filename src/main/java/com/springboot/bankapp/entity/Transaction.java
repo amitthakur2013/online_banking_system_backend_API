@@ -2,8 +2,11 @@ package com.springboot.bankapp.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,6 +17,7 @@ import javax.persistence.Table;
 public class Transaction implements Serializable{
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Trans_Id",nullable = false)
 	private long transId;
 	
@@ -40,10 +44,14 @@ public class Transaction implements Serializable{
 	
 	@Column(name="From_User_Id")
 	private int fromUserId;
+	
+	/*@Column(name="To_Benif_Id")
+	private long toBenifId;*/
 
 	@ManyToOne
-	@JoinColumn(name="To_Benif_Id", referencedColumnName = "Benif_Id")
+	@JoinColumn(name="Benif_Id")
 	private Benificiary benificiary;
+	
 	
 	public Transaction() {
 	}
@@ -127,12 +135,29 @@ public class Transaction implements Serializable{
 	public void setFromUserId(int fromUserId) {
 		this.fromUserId = fromUserId;
 	}
+	
+
+	public Transaction(long transId, long refNo, double amount, String remark, String status, String createdOn,
+			double availBal, long fromAccountNo, int fromUserId, Benificiary benificiary) {
+		super();
+		this.transId = transId;
+		this.refNo = refNo;
+		this.amount = amount;
+		this.remark = remark;
+		this.status = status;
+		this.createdOn = createdOn;
+		this.availBal = availBal;
+		this.fromAccountNo = fromAccountNo;
+		this.fromUserId = fromUserId;
+		this.benificiary = benificiary;
+	}
 
 	@Override
 	public String toString() {
 		return "Transaction [transId=" + transId + ", refNo=" + refNo + ", amount=" + amount + ", remark=" + remark
 				+ ", status=" + status + ", createdOn=" + createdOn + ", availBal=" + availBal + ", fromAccountNo="
-				+ fromAccountNo + ", fromUserId=" + fromUserId + ", benificiary=" + benificiary + "]";
+				+ fromAccountNo + ", fromUserId=" + fromUserId + "]";
 	}
+
 	
 }

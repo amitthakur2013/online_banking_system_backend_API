@@ -22,4 +22,10 @@ public class TransactionServiceImpl implements TransactionService {
 		return transactions;
 	}
 
+	@Override
+	public Transaction saveTransaction(Transaction transaction) {
+		Transaction trans=this.transactionRepository.save(transaction);
+		return trans;
+	}
+
 }

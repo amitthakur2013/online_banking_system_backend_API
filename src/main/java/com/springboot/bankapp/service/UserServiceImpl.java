@@ -37,4 +37,10 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public User saveUserAfterBenef(User user) {
+		
+		return this.userRepository.save(user);
+	}
+
 }

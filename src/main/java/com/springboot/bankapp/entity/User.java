@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -66,6 +68,16 @@ public class User implements Serializable{
 	@JsonIgnore
 	List<Transaction> transactions=new ArrayList<>();*/
 	
+	@JsonIgnore
+	@ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "user_beneficiary",
+			joinColumns = { @JoinColumn(name="User_Id",referencedColumnName = "User_Id") },
+			inverseJoinColumns = { @JoinColumn(name="Benif_Id",referencedColumnName = "Benif_Id") }
+			)
+	List<Benificiary> benificiaryList=new ArrayList<>();
+	
+
 	public User() {
 	}
 
@@ -155,6 +167,14 @@ public class User implements Serializable{
 
 	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
+	}
+	
+	public List<Benificiary> getBenificiaryList() {
+		return benificiaryList;
+	}
+
+	public void setBenificiaryList(List<Benificiary> benificiaryList) {
+		this.benificiaryList = benificiaryList;
 	}
 
 	@Override
