@@ -18,6 +18,7 @@ import com.springboot.bankapp.entity.Transaction;
 import com.springboot.bankapp.entity.User;
 import com.springboot.bankapp.helper.FundTransferData;
 import com.springboot.bankapp.helper.RefGenerator;
+import com.springboot.bankapp.helper.TransStatus;
 import com.springboot.bankapp.service.AccountService;
 import com.springboot.bankapp.service.BeneficiaryService;
 import com.springboot.bankapp.service.TransactionService;
@@ -47,7 +48,7 @@ public class TransferController {
 	private RefGenerator refGenerator;
 	
 	@PostMapping("/fund_transfer")
-	public ResponseEntity<?> createTransaction(@RequestBody FundTransferData fundData, Principal principal){
+	public TransStatus createTransaction(@RequestBody FundTransferData fundData, Principal principal){
 		Account acc=this.accountService.getAccountDetails(fundData.getFromAccountNo());
 		String email=principal.getName();
 		User user=this.userService.findByEmailId(email);
@@ -78,11 +79,12 @@ public class TransferController {
 				benif.setTrans(tm);
 				Benificiary b=this.beneficiaryService.updateBeneficiary(benif);
 				//Transaction trans=this.transactionService.saveTransaction(transaction);
-				return ResponseEntity.ok(b.getTrans());
+				TransStatus ts=new TransStatus("success","Your Transaction is Successfull!");
+				return ts;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(e.getMessage());
+			return new TransStatus("failure",e.getMessage());
 		
 		}
 		
