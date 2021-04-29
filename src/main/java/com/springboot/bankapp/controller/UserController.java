@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.bankapp.entity.Account;
 import com.springboot.bankapp.entity.Benificiary;
 import com.springboot.bankapp.entity.User;
+import com.springboot.bankapp.service.BeneficiaryService;
 import com.springboot.bankapp.service.UserService;
 
 @RestController
@@ -32,6 +34,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private BeneficiaryService beneficiaryService;
 	
 	@GetMapping("/account/dashboard")
 	public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
@@ -68,6 +73,11 @@ public class UserController {
 		String email=principal.getName();
 		User user=this.userService.findByEmailId(email);
 		return ResponseEntity.ok(user);
+	}
+	
+	@GetMapping("/transfer/beneficiary_details/{id}")
+	public Benificiary benefDetails(@PathVariable long id) {
+		return this.beneficiaryService.getBeneficiaryDetails(id);
 	}
 	
 }
