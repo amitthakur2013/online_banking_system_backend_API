@@ -26,4 +26,9 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
 		return this.beneficiaryRepository.save(benif);
 	}
 
+	@Override
+	public void deleteBeneficiary(long bid) {
+		this.beneficiaryRepository.deleteById(bid);
+	}
+
 }

@@ -8,4 +8,5 @@ import com.springboot.bankapp.entity.Benificiary;
 public interface BeneficiaryService {
 	Benificiary getBeneficiaryDetails(long bid);
 	Benificiary updateBeneficiary(Benificiary benif);
+	void deleteBeneficiary(long bid);
 }

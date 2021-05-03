@@ -79,12 +79,12 @@ public class TransferController {
 				benif.setTrans(tm);
 				Benificiary b=this.beneficiaryService.updateBeneficiary(benif);
 				//Transaction trans=this.transactionService.saveTransaction(transaction);
-				TransStatus ts=new TransStatus("success","Your Transaction is Successfull!");
+				TransStatus ts=new TransStatus("success","Your Transaction is Successfull!",String.valueOf(transaction.getRefNo()));
 				return ts;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new TransStatus("failure",e.getMessage());
+			return new TransStatus("failure",e.getMessage(),"");
 		
 		}
 		

@@ -7,16 +7,35 @@ public class TransStatus {
 	private String category;
 	
 	private String content;
+	
+	private String refNo;
 
 	public TransStatus() {
 
 	}
 
-	public TransStatus(String category, String content) {
+	
+
+	public String getRefNo() {
+		return refNo;
+	}
+
+
+
+	public void setRefNo(String refNo) {
+		this.refNo = refNo;
+	}
+
+
+
+	public TransStatus(String category, String content, String refNo) {
 		super();
 		this.category = category;
 		this.content = content;
+		this.refNo = refNo;
 	}
+
+
 
 	public String getCategory() {
 		return category;
