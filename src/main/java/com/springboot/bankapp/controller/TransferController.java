@@ -50,8 +50,10 @@ public class TransferController {
 	@PostMapping("/fund_transfer")
 	public TransStatus createTransaction(@RequestBody FundTransferData fundData, Principal principal){
 		Account acc=this.accountService.getAccountDetails(fundData.getFromAccountNo());
-		String email=principal.getName();
-		User user=this.userService.findByEmailId(email);
+		/*String email=principal.getName();
+		User user=this.userService.findByEmailId(email);*/
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
 		try {
 			if(!user.getTransPwd().equals(fundData.getTransPwd())) {
 				

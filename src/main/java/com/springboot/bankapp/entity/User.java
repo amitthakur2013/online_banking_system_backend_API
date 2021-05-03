@@ -31,6 +31,9 @@ public class User implements Serializable{
 	@Column(name="User_Id")
 	private int userId;
 	
+	@Column(name="username",nullable=false)
+	private String username;
+	
 	@Column(name="First_Name",nullable = false)
 	private String firstName;
 	
@@ -175,6 +178,14 @@ public class User implements Serializable{
 
 	public void setBenificiaryList(List<Benificiary> benificiaryList) {
 		this.benificiaryList = benificiaryList;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	@Override
