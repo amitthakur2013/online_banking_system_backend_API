@@ -44,9 +44,10 @@ public class UserController {
 	
 	@GetMapping("/account/dashboard")
 	public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
-		String email=principal.getName();
-		//User user=this.userService.findByUserId(1);
-		User user=this.userService.findByEmailId(email);
+		/*String email=principal.getName();
+		User user=this.userService.findByEmailId(email);*/
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
 		Map<String, Object> map = new HashMap<>();
 		map.put("user", user);
 		List<Account> all_accnts=new ArrayList<>();
@@ -57,8 +58,10 @@ public class UserController {
 	
 	@PostMapping("/transfer/beneficiary")
 	public ResponseEntity<String> addBeneficiary(Principal principal,@RequestBody AddBenifData benifData){
-		String email=principal.getName();
-		User user=this.userService.findByEmailId(email);
+		/*String email=principal.getName();
+		User user=this.userService.findByEmailId(email);*/
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
 		try {
 			if(!benifData.getTransPwd().equals(user.getTransPwd())){
 				throw new Exception("Invalid Password!");
@@ -84,16 +87,20 @@ public class UserController {
 	
 	@GetMapping("/transfer/beneficiary_list")
 	public ResponseEntity<?> BenefeciaryList(Principal principal){
-		String email=principal.getName();
-		User user=this.userService.findByEmailId(email);
+		/*String email=principal.getName();
+		User user=this.userService.findByEmailId(email);*/
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
 		List benificiaryList=user.getBenificiaryList();
 		return ResponseEntity.ok(benificiaryList);
 	}
 	
 	@GetMapping("/current_user")
 	public ResponseEntity<?> currentUser(Principal principal){
-		String email=principal.getName();
-		User user=this.userService.findByEmailId(email);
+		/*String email=principal.getName();
+		User user=this.userService.findByEmailId(email);*/
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
 		return ResponseEntity.ok(user);
 	}
 	
@@ -104,8 +111,10 @@ public class UserController {
 	
 	@DeleteMapping("/transfer/beneficiary/{id}")
 	public String removeBenificiary(@PathVariable long id, Principal principal) {
-		String email=principal.getName();
-		User user=this.userService.findByEmailId(email);
+		/*String email=principal.getName();
+		User user=this.userService.findByEmailId(email);*/
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
 		Benificiary benif=this.beneficiaryService.getBeneficiaryDetails(id);
 		user.getBenificiaryList().remove(benif);
 		this.userService.saveUserAfterBenef(user);

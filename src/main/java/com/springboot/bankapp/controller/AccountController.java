@@ -43,8 +43,10 @@ public class AccountController {
 	
 	@GetMapping("/account_list")
 	public ResponseEntity<?> getUserAccountList(Principal principal){
-		String email=principal.getName();
-		User user=this.userService.findByEmailId(email);
+		/*String email=principal.getName();
+		User user=this.userService.findByEmailId(email);*/
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
 		List accountList=user.getAccounts();
 		return ResponseEntity.ok(accountList);
 	}
