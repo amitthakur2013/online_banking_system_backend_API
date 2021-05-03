@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.bankapp.entity.Account;
 import com.springboot.bankapp.entity.Benificiary;
 import com.springboot.bankapp.entity.User;
+import com.springboot.bankapp.helper.AddBenifData;
 import com.springboot.bankapp.service.BeneficiaryService;
 import com.springboot.bankapp.service.UserService;
 
@@ -37,6 +38,9 @@ public class UserController {
 	
 	@Autowired
 	private BeneficiaryService beneficiaryService;
+	
+	@Autowired
+	private AddBenifData benifData;
 	
 	@GetMapping("/account/dashboard")
 	public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
@@ -52,11 +56,29 @@ public class UserController {
 	}
 	
 	@PostMapping("/transfer/beneficiary")
-	public ResponseEntity<User> addBeneficiary(Principal principal,@RequestBody Benificiary benif){
+	public ResponseEntity<String> addBeneficiary(Principal principal,@RequestBody AddBenifData benifData){
 		String email=principal.getName();
 		User user=this.userService.findByEmailId(email);
-		user.getBenificiaryList().add(benif);
-		return ResponseEntity.ok(this.userService.saveUserAfterBenef(user));
+		try {
+			if(!benifData.getTransPwd().equals(user.getTransPwd())){
+				throw new Exception("Invalid Password!");
+			} else {
+				Benificiary benif=new Benificiary();
+				benif.setName(benifData.getName());
+				benif.setBankName(benifData.getBankName());
+				benif.setBranchName(benifData.getBranchName());
+				benif.setIfscCode(benifData.getIfscCode());
+				benif.setNickname(benifData.getNickname());
+				benif.setAccountNo(benifData.getAccountNo());
+				
+				user.getBenificiaryList().add(benif);
+				this.userService.saveUserAfterBenef(user);
+				return ResponseEntity.ok("Beneficiary added Successfully!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(e.getMessage());
+		}	
 		
 	}
 	
@@ -78,6 +100,17 @@ public class UserController {
 	@GetMapping("/transfer/beneficiary_details/{id}")
 	public Benificiary benefDetails(@PathVariable long id) {
 		return this.beneficiaryService.getBeneficiaryDetails(id);
+	}
+	
+	@DeleteMapping("/transfer/beneficiary/{id}")
+	public String removeBenificiary(@PathVariable long id, Principal principal) {
+		String email=principal.getName();
+		User user=this.userService.findByEmailId(email);
+		Benificiary benif=this.beneficiaryService.getBeneficiaryDetails(id);
+		user.getBenificiaryList().remove(benif);
+		this.userService.saveUserAfterBenef(user);
+		this.beneficiaryService.deleteBeneficiary(id);
+		return "success";
 	}
 	
 }
