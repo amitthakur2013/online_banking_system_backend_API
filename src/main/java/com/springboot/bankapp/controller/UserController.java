@@ -138,17 +138,26 @@ public class UserController {
 		
 	}
 	
-	@DeleteMapping("/transfer/beneficiary/{id}")
-	public String removeBenificiary(@PathVariable long id, Principal principal) {
-		/*String email=principal.getName();
-		User user=this.userService.findByEmailId(email);*/
+	@PostMapping("/transfer/manage_beneficiary")
+	public String removeBenificiary(@RequestBody AddBenifData benifData, Principal principal) {
 		String username=principal.getName();
 		User user=this.userService.findByUserName(username);
-		Benificiary benif=this.beneficiaryService.getBeneficiaryDetails(id);
-		user.getBenificiaryList().remove(benif);
-		this.userService.saveUserAfterBenef(user);
-		this.beneficiaryService.deleteBeneficiary(id);
-		return "success";
+		try {
+			if(!benifData.getTransPwd().equals(user.getTransPwd())) {
+				throw new Exception("Invalid Password!");
+			} else {
+				Benificiary benif=this.beneficiaryService.getBeneficiaryDetails(benifData.getBenifId());
+				user.getBenificiaryList().remove(benif);
+				this.userService.saveUserAfterBenef(user);
+				this.beneficiaryService.deleteBeneficiary(benifData.getBenifId());
+				return "Deleted Successfully!";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
 	}
+
 	
 }
