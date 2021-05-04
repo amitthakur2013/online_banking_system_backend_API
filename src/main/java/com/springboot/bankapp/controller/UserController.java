@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -107,6 +108,34 @@ public class UserController {
 	@GetMapping("/transfer/beneficiary_details/{id}")
 	public Benificiary benefDetails(@PathVariable long id) {
 		return this.beneficiaryService.getBeneficiaryDetails(id);
+	}
+	
+	@PutMapping("/transfer/manage_beneficiary")
+	public String updateBenif(@RequestBody AddBenifData benifData, Principal principal) {
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
+		try {
+			if(!benifData.getTransPwd().equals(user.getTransPwd())) {
+				throw new Exception("Invalid Password!");
+			} else {
+				Benificiary benif=new Benificiary();
+				benif.setName(benifData.getName());
+				benif.setBankName(benifData.getBankName());
+				benif.setBranchName(benifData.getBranchName());
+				benif.setIfscCode(benifData.getIfscCode());
+				benif.setNickname(benifData.getNickname());
+				benif.setAccountNo(benifData.getAccountNo());
+				benif.setBenifId(benifData.getBenifId());
+				
+				this.beneficiaryService.updateBeneficiary(benif);
+				return "Beneficiary Updated Successfully!";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+		
 	}
 	
 	@DeleteMapping("/transfer/beneficiary/{id}")

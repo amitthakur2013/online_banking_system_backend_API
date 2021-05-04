@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddBenifData {
 
+	private long benifId;
 	private String name;
 	private long accountNo;
 	private String bankName;
@@ -17,8 +18,12 @@ public class AddBenifData {
 		
 	}
 	
-	public AddBenifData(String name, long accountNo, String bankName, String branchName, String ifscCode,
+	
+
+	public AddBenifData(long benifId, String name, long accountNo, String bankName, String branchName, String ifscCode,
 			String nickname, String transPwd) {
+		super();
+		this.benifId = benifId;
 		this.name = name;
 		this.accountNo = accountNo;
 		this.bankName = bankName;
@@ -27,6 +32,19 @@ public class AddBenifData {
 		this.nickname = nickname;
 		this.transPwd = transPwd;
 	}
+
+
+
+	public long getBenifId() {
+		return benifId;
+	}
+
+
+	public void setBenifId(long benifId) {
+		this.benifId = benifId;
+	}
+
+
 
 	public String getTransPwd() {
 		return transPwd;
