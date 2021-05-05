@@ -158,6 +158,22 @@ public class UserController {
 			return e.getMessage();
 		}
 	}
+	
+	@DeleteMapping("/transfer/manage_beneficiary/{id}")
+	public String deleteBenificiary(@PathVariable long id, Principal principal) {
+		try {
+		String username=principal.getName();
+		User user=this.userService.findByUserName(username);
+		Benificiary benif=this.beneficiaryService.getBeneficiaryDetails(id);
+		user.getBenificiaryList().remove(benif);
+		this.userService.saveUserAfterBenef(user);
+		this.beneficiaryService.deleteBeneficiary(id);
+		return "Deleted Successfully!";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
 
 	
 }
