@@ -16,6 +16,7 @@ import com.springboot.bankapp.entity.Account;
 import com.springboot.bankapp.entity.Benificiary;
 import com.springboot.bankapp.entity.Transaction;
 import com.springboot.bankapp.entity.User;
+import com.springboot.bankapp.helper.AES;
 import com.springboot.bankapp.helper.FundTransferData;
 import com.springboot.bankapp.helper.RefGenerator;
 import com.springboot.bankapp.helper.TransStatus;
@@ -50,10 +51,16 @@ public class TransferController {
 	@PostMapping("/fund_transfer")
 	public TransStatus createTransaction(@RequestBody FundTransferData fundData, Principal principal){
 		Account acc=this.accountService.getAccountDetails(fundData.getFromAccountNo());
-		/*String email=principal.getName();
-		User user=this.userService.findByEmailId(email);*/
 		String username=principal.getName();
 		User user=this.userService.findByUserName(username);
+		
+		AES aesUtil = new AES(128, 1000);
+		String decryptedPassword =  new String(java.util.Base64.getDecoder().decode(fundData.getTransPwd()));
+		if (decryptedPassword != null && decryptedPassword.split("::").length == 3) {
+			String password = aesUtil.decrypt(decryptedPassword.split("::")[1], decryptedPassword.split("::")[0], "thisissecret", decryptedPassword.split("::")[2]);
+			fundData.setTransPwd(password);
+		}
+		
 		try {
 			if(!user.getTransPwd().equals(fundData.getTransPwd())) {
 				
