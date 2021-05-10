@@ -1,5 +1,11 @@
 package com.springboot.bankapp.controller;
 
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,11 +13,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.bankapp.helper.AES;
+import com.springboot.bankapp.helper.AesUtil;
 import com.springboot.bankapp.helper.JwtUtil;
 import com.springboot.bankapp.model.JwtRequest;
 import com.springboot.bankapp.model.JwtResponse;
@@ -31,15 +39,27 @@ public class JwtController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	@GetMapping("/key")
+	public ResponseEntity<?> generateSecurityKey(){
+		AesUtil aesUtil=new AesUtil();
+		SecretKey key=aesUtil.generateKey();
+		String key2=Base64.getEncoder().encodeToString(key.getEncoded());
+		Map<String, String> map=new HashMap<>();
+		map.put("key", key2);
+		map.put("iv", aesUtil.getIv());
+		return ResponseEntity.ok(map);
+		
+	}
+	
 	@PostMapping("/token")
 	public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest){
+		
 		//System.out.println(jwtRequest.toString());
-		AES aesUtil = new AES(128, 1000);
-		String decryptedPassword =  new String(java.util.Base64.getDecoder().decode(jwtRequest.getPassword()));
-		if (decryptedPassword != null && decryptedPassword.split("::").length == 3) {
-			String password = aesUtil.decrypt(decryptedPassword.split("::")[1], decryptedPassword.split("::")[0], "thisissecret", decryptedPassword.split("::")[2]);
-			jwtRequest.setPassword(password);
-		}
+		AesUtil aesUtil=new AesUtil();
+		String password = aesUtil.decrypt(jwtRequest.getPassword().toString());
+		//System.out.println(password);
+		jwtRequest.setPassword(password);
+	
 		//System.out.println(jwtRequest.toString());
 		try {
 			this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), jwtRequest.getPassword()));
@@ -53,15 +73,12 @@ public class JwtController {
 			}
 		} 
 		
-		
 		// fine area
 		UserDetails userDetails= this.customUserDetailsService.loadUserByUsername(jwtRequest.getUsername());
 		String token=this.jwtUtil.generateToken(userDetails);
 		//System.out.println("JWT "+token);
 		
-		// {"token":"value"}
-		
 		return ResponseEntity.ok(new JwtResponse(token));
-		
 	}
+	
 }
