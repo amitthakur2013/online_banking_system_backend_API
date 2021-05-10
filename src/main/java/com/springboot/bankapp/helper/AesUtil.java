@@ -15,15 +15,29 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
-public class AES {
-    private final int keySize;
-    private final int iterationCount;
+public class AesUtil {
+    private final int keySize=128;
+    private final int iterationCount=1000;
     private final Cipher cipher;
+    private final String salt="f4d2e613fa9cefddc637a0e72f7eed9d";
+    private final String iv="67b52091dc4b98645fe707d019095502";
+    private final String passphrase="thisissecret";
+    private SecretKey finalKey;
     
-    
-    public AES(int keySize, int iterationCount) {
-        this.keySize = keySize;
-        this.iterationCount = iterationCount;
+    public String getIv() {
+		return iv;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public String getPassphrase() {
+		return passphrase;
+	}
+
+
+	public AesUtil() {
         try {
             cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         }
@@ -32,10 +46,11 @@ public class AES {
         }
     }
     
-    public String decrypt(String salt, String iv, String passphrase, String ciphertext) {
+    public String decrypt(String ciphertext) {
         try {
-            SecretKey key = generateKey(salt, passphrase);
-            byte[] decrypted = doFinal(Cipher.DECRYPT_MODE, key, iv, base64(ciphertext));
+        	this.generateKey();
+            SecretKey key = finalKey;
+            byte[] decrypted = doFinal(Cipher.DECRYPT_MODE, key, this.getIv(), base64(ciphertext));
             return new String(decrypted, "UTF-8");
         }
         catch (UnsupportedEncodingException e) {
@@ -58,11 +73,12 @@ public class AES {
         }
     }
     
-    private SecretKey generateKey(String salt, String passphrase) {
+    public SecretKey generateKey() {
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            KeySpec spec = new PBEKeySpec(passphrase.toCharArray(), hex(salt), iterationCount, keySize);
+            KeySpec spec = new PBEKeySpec(this.getPassphrase().toCharArray(), hex(this.getSalt()), iterationCount, keySize);
             SecretKey key = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+            this.finalKey=key;
             return key;
         }
         catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -86,6 +102,5 @@ public class AES {
     private IllegalStateException fail(Exception e) {
         return null;
     }
-    
 
 }
