@@ -39,19 +39,30 @@ public class Vendor implements Serializable{
 	
 	@Column(name = "category")
 	private String category;
+	
+	@OneToMany(mappedBy = "vendor", fetch= FetchType.LAZY,
+    cascade = CascadeType.ALL)
+	@JsonIgnore
+	List<Biller> billerList=new ArrayList<>();
 
 	public Vendor() {
 	
 	}
 
-	public Vendor(long vendorId, String vName, String vEmail, String vPhone, String vcompName, String category) {
+
+	public Vendor(long vendorId, String vName, String vEmail, String vPhone, String vcompName, String category,
+			List<Biller> billerList) {
+		super();
 		this.vendorId = vendorId;
 		this.vName = vName;
 		this.vEmail = vEmail;
 		this.vPhone = vPhone;
 		this.vcompName = vcompName;
 		this.category = category;
+		this.billerList = billerList;
 	}
+
+
 
 	public long getVendorId() {
 		return vendorId;
@@ -99,6 +110,14 @@ public class Vendor implements Serializable{
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public List<Biller> getBillerList() {
+		return billerList;
+	}
+
+	public void setBillerList(List<Biller> billerList) {
+		this.billerList = billerList;
 	}
 
 	@Override

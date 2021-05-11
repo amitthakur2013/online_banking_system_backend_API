@@ -51,13 +51,20 @@ public class BillerController {
 		return ResponseEntity.ok(b);
 	}
 	
-	@PostMapping("/biller")
-	public ResponseEntity<?> addBiller(@RequestBody Biller biller,Principal principal){
+	@PostMapping("/biller/{vid}")
+	public ResponseEntity<?> addBiller(@RequestBody Biller biller,Principal principal,@PathVariable long vid){
+		try {
 		String username=principal.getName();
 		User user=this.userService.findByUserName(username);
+		Vendor vendor=this.vendorService.getVendorById(vid);
+		biller.setVendor(vendor);
 		user.getBillerList().add(biller);
 		this.userService.saveUserAfterBenef(user);
-		return ResponseEntity.ok(user.getBillerList());
+		return ResponseEntity.ok("Beneficiary Added Successfully!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(e.getMessage());
+		}
 		
 	}
 	
@@ -81,6 +88,9 @@ public class BillerController {
 		Biller biller=this.billerService.getBillerDetails(id);
 		user.getBillerList().remove(biller);
 		this.userService.saveUserAfterBenef(user);
+		Vendor vendor=this.vendorService.getVendorById(biller.getVendor().getVendorId());
+		vendor.getBillerList().remove(biller);
+		this.vendorService.saveVendorAfterBill(vendor);
 		this.billerService.deleteBiller(id);
 		return "Deleted Successfully!";
 		} catch (Exception e) {

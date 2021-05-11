@@ -36,36 +36,31 @@ public class Biller implements Serializable{
 	@Column(name="electricbill_no")
 	private String electricbillNo;
 	
-		
-	@Column(name="vendor_id")
-	private long vendorId;
-	
 	@JsonIgnore
 	@ManyToMany(mappedBy = "billerList",fetch= FetchType.LAZY)
 	List<User> userList=new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name="vendor_id")
+	private Vendor vendor;
 
 	public Biller() {
 		
 	}
-	
-	public Biller(long billerId, String premiumNo, String mobNo, String electricbillNo, long vendorId,
-			List<User> userList) {
+
+
+	public Biller(long billerId, String premiumNo, String mobNo, String electricbillNo, List<User> userList,
+			Vendor vendor) {
 		super();
 		this.billerId = billerId;
 		this.premiumNo = premiumNo;
 		this.mobNo = mobNo;
 		this.electricbillNo = electricbillNo;
-		this.vendorId = vendorId;
 		this.userList = userList;
+		this.vendor = vendor;
 	}
 
-	public long getVendorId() {
-		return vendorId;
-	}
 
-	public void setVendorId(long vendorId) {
-		this.vendorId = vendorId;
-	}
 
 	public long getBillerId() {
 		return billerId;
@@ -106,5 +101,14 @@ public class Biller implements Serializable{
 	public void setUserList(List<User> userList) {
 		this.userList = userList;
 	}
+
+	public Vendor getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(Vendor vendor) {
+		this.vendor = vendor;
+	}
+	
 	
 }
