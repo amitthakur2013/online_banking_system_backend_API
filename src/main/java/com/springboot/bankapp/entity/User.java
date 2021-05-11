@@ -67,9 +67,7 @@ public class User implements Serializable{
 	@JsonIgnore
     List<Account> accounts=new ArrayList<>();
 	
-	/*@OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnore
-	List<Transaction> transactions=new ArrayList<>();*/
+	
 	
 	@JsonIgnore
 	@ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.LAZY)
@@ -79,6 +77,15 @@ public class User implements Serializable{
 			inverseJoinColumns = { @JoinColumn(name="Benif_Id",referencedColumnName = "Benif_Id") }
 			)
 	List<Benificiary> benificiaryList=new ArrayList<>();
+	
+	@JsonIgnore
+	@ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "user_biller",
+			joinColumns = { @JoinColumn(name="User_Id",referencedColumnName = "User_Id") },
+			inverseJoinColumns = { @JoinColumn(name="biller_id",referencedColumnName = "biller_id") }
+			)
+	List<Biller> billerList=new ArrayList<>();
 	
 
 	public User() {
@@ -186,6 +193,14 @@ public class User implements Serializable{
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public List<Biller> getBillerList() {
+		return billerList;
+	}
+
+	public void setBillerList(List<Biller> billerList) {
+		this.billerList = billerList;
 	}
 
 	@Override
