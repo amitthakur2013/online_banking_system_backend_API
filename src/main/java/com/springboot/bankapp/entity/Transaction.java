@@ -52,8 +52,31 @@ public class Transaction implements Serializable{
 	@JoinColumn(name="Benif_Id")
 	private Benificiary benificiary;
 	
+	@Column(name="Trans_Type")
+	private String trans_type;
+	
+	@Column(name="Biller")
+	private String biller;
+	
 	
 	public Transaction() {
+	}
+
+	public Transaction(long transId, long refNo, double amount, String remark, String status, String createdOn,
+			double availBal, long fromAccountNo, int fromUserId, Benificiary benificiary, String trans_type,
+			String biller) {
+		this.transId = transId;
+		this.refNo = refNo;
+		this.amount = amount;
+		this.remark = remark;
+		this.status = status;
+		this.createdOn = createdOn;
+		this.availBal = availBal;
+		this.fromAccountNo = fromAccountNo;
+		this.fromUserId = fromUserId;
+		this.benificiary = benificiary;
+		this.trans_type = trans_type;
+		this.biller = biller;
 	}
 
 	public long getTransId() {
@@ -137,19 +160,23 @@ public class Transaction implements Serializable{
 	}
 	
 
-	public Transaction(long transId, long refNo, double amount, String remark, String status, String createdOn,
-			double availBal, long fromAccountNo, int fromUserId, Benificiary benificiary) {
-		super();
-		this.transId = transId;
-		this.refNo = refNo;
-		this.amount = amount;
-		this.remark = remark;
-		this.status = status;
-		this.createdOn = createdOn;
-		this.availBal = availBal;
-		this.fromAccountNo = fromAccountNo;
-		this.fromUserId = fromUserId;
-		this.benificiary = benificiary;
+	
+
+	public String getTrans_type() {
+		return trans_type;
+	}
+
+	public void setTrans_type(String trans_type) {
+		this.trans_type = trans_type;
+	}
+
+	
+	public String getBiller() {
+		return biller;
+	}
+
+	public void setBiller(String biller) {
+		this.biller = biller;
 	}
 
 	@Override

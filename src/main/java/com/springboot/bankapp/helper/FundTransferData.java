@@ -10,16 +10,23 @@ public class FundTransferData {
 	private long fromAccountNo;
 	private String transPwd;
 	private long toBenifId;
-	public FundTransferData(double amount, String remark, long fromAccountNo, String transPwd, long toBenifId) {
+	private String biller;
+	//private long vendorId;
+	
+	public FundTransferData() {
+		
+	}
+	
+	public FundTransferData(double amount, String remark, long fromAccountNo, String transPwd, long toBenifId,
+			String biller) {
 		this.amount = amount;
 		this.remark = remark;
 		this.fromAccountNo = fromAccountNo;
 		this.transPwd = transPwd;
 		this.toBenifId = toBenifId;
+		this.biller = biller;
 	}
-	public FundTransferData() {
-		
-	}
+	
 	public double getAmount() {
 		return amount;
 	}
@@ -50,7 +57,12 @@ public class FundTransferData {
 	public void setToBenifId(long toBenifId) {
 		this.toBenifId = toBenifId;
 	}
-	
+	public String getBiller() {
+		return biller;
+	}
+	public void setBiller(String biller) {
+		this.biller = biller;
+	}
 	
 	
 }
