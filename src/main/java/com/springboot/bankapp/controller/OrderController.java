@@ -16,41 +16,33 @@ import com.springboot.bankapp.entity.Account;
 import com.springboot.bankapp.entity.Benificiary;
 import com.springboot.bankapp.entity.Transaction;
 import com.springboot.bankapp.entity.User;
-import com.springboot.bankapp.helper.AES;
 import com.springboot.bankapp.helper.AesUtil;
 import com.springboot.bankapp.helper.FundTransferData;
 import com.springboot.bankapp.helper.RefGenerator;
 import com.springboot.bankapp.helper.TransStatus;
 import com.springboot.bankapp.service.AccountService;
-import com.springboot.bankapp.service.BeneficiaryService;
 import com.springboot.bankapp.service.TransactionService;
 import com.springboot.bankapp.service.UserService;
 
-@CrossOrigin
 @RestController
-@RequestMapping("/banking/transfer")
-public class TransferController {
-	
-	@Autowired
-	private FundTransferData fundData;
-	
-	@Autowired
-	private BeneficiaryService beneficiaryService;
-	
-	@Autowired
-	private TransactionService transactionService;
-	
-	@Autowired
-	private AccountService accountService;
+@CrossOrigin
+@RequestMapping("/banking/payments")
+public class OrderController {
 	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
-	private RefGenerator refGenerator;
+	private AccountService accountService;
 	
-	@PostMapping("/fund_transfer")
-	public TransStatus createTransaction(@RequestBody FundTransferData fundData, Principal principal){
+	@Autowired
+	private TransactionService transactionService;
+	
+	@Autowired
+	private RefGenerator refGenerator;
+
+	@PostMapping("/pay_bill")
+	public TransStatus billPayment(@RequestBody FundTransferData fundData,Principal principal) {
 		Account acc=this.accountService.getAccountDetails(fundData.getFromAccountNo());
 		String username=principal.getName();
 		User user=this.userService.findByUserName(username);
@@ -79,15 +71,9 @@ public class TransferController {
 				transaction.setFromUserId(user.getUserId());
 				transaction.setRefNo(refGenerator.generateRefNo(transaction.getTransId()));
 				transaction.setCreatedOn(refGenerator.getCurrentDateTime()); 
-				transaction.setTrans_type("Fund_Transfer");
-				transaction.setBiller("");
-				Benificiary benif=this.beneficiaryService.getBeneficiaryDetails(fundData.getToBenifId());
-				List tm=new ArrayList<>();
-				tm=benif.getTrans();
-				tm.add(transaction);
-				benif.setTrans(tm);
-				Benificiary b=this.beneficiaryService.updateBeneficiary(benif);
-				//Transaction trans=this.transactionService.saveTransaction(transaction);
+				transaction.setTrans_type("Bill_Payment");
+				transaction.setBiller(fundData.getBiller());
+				this.transactionService.saveTransaction(transaction);
 				TransStatus ts=new TransStatus("success","Your Transaction is Successfull!",String.valueOf(transaction.getRefNo()));
 				return ts;
 			}
@@ -96,7 +82,6 @@ public class TransferController {
 			return new TransStatus("failure",e.getMessage(),"");
 		
 		}
-		
-		
+
 	}
 }
