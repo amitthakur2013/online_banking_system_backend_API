@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.bankapp.entity.Biller;
 import com.springboot.bankapp.entity.User;
 import com.springboot.bankapp.entity.Vendor;
+import com.springboot.bankapp.helper.AddBenifData;
 import com.springboot.bankapp.service.BillerService;
 import com.springboot.bankapp.service.UserService;
 import com.springboot.bankapp.service.VendorService;
@@ -52,10 +53,20 @@ public class BillerController {
 	}
 	
 	@PostMapping("/biller/{vid}")
-	public ResponseEntity<?> addBiller(@RequestBody Biller biller,Principal principal,@PathVariable long vid){
+	public ResponseEntity<?> addBiller(@RequestBody AddBenifData data,Principal principal,@PathVariable long vid){
 		try {
+		
 		String username=principal.getName();
 		User user=this.userService.findByUserName(username);
+		
+		if(!user.getTransPwd().equals(data.getTransPwd())) {
+			throw new Exception("Invalid Password!");
+		}
+		
+		Biller biller=new Biller();
+		biller.setMobNo(data.getMobNo());
+		biller.setElectricbillNo(data.getElectricbillNo());
+		biller.setPremiumNo(data.getPremiumNo());
 		Vendor vendor=this.vendorService.getVendorById(vid);
 		biller.setVendor(vendor);
 		user.getBillerList().add(biller);
@@ -68,15 +79,26 @@ public class BillerController {
 		
 	}
 	
-	@PutMapping("/biller/manage_biller")
-	public String updateBiller(@RequestBody Biller biller,Principal principal){
+	@PostMapping("/authenticate")
+	public String authenticateOperations(@RequestBody AddBenifData data,Principal principal) {
 		try {
-			this.billerService.updateBiller(biller);
-			return "Updated Successfully";
+			String username=principal.getName();
+			User user=this.userService.findByUserName(username);
+			
+			if(!user.getTransPwd().equals(data.getTransPwd())) {
+				throw new Exception("Invalid Password!");
+			}
+			return "valid";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return e.getMessage();
 		}
+	}
+	
+	@PutMapping("/biller")
+	public String updateBiller(@RequestBody Biller biller){
+		this.billerService.updateBiller(biller);
+		return "Biller Updated Successfully";
 		
 	}
 	

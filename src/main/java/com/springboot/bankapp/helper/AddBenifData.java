@@ -13,15 +13,16 @@ public class AddBenifData {
 	private String ifscCode;
 	private String nickname;
 	private String transPwd;
+	private String premiumNo;
+	private String mobNo;
+	private String electricbillNo;
 	
 	public AddBenifData() {
 		
 	}
-	
-	
 
 	public AddBenifData(long benifId, String name, long accountNo, String bankName, String branchName, String ifscCode,
-			String nickname, String transPwd) {
+			String nickname, String transPwd, String premiumNo, String mobNo, String electricbillNo) {
 		super();
 		this.benifId = benifId;
 		this.name = name;
@@ -31,9 +32,34 @@ public class AddBenifData {
 		this.ifscCode = ifscCode;
 		this.nickname = nickname;
 		this.transPwd = transPwd;
+		this.premiumNo = premiumNo;
+		this.mobNo = mobNo;
+		this.electricbillNo = electricbillNo;
 	}
 
+	public String getPremiumNo() {
+		return premiumNo;
+	}
 
+	public void setPremiumNo(String premiumNo) {
+		this.premiumNo = premiumNo;
+	}
+
+	public String getMobNo() {
+		return mobNo;
+	}
+
+	public void setMobNo(String mobNo) {
+		this.mobNo = mobNo;
+	}
+
+	public String getElectricbillNo() {
+		return electricbillNo;
+	}
+
+	public void setElectricbillNo(String electricbillNo) {
+		this.electricbillNo = electricbillNo;
+	}
 
 	public long getBenifId() {
 		return benifId;
