@@ -20,6 +20,7 @@ import com.springboot.bankapp.entity.Biller;
 import com.springboot.bankapp.entity.User;
 import com.springboot.bankapp.entity.Vendor;
 import com.springboot.bankapp.helper.AddBenifData;
+import com.springboot.bankapp.helper.AesUtil;
 import com.springboot.bankapp.service.BillerService;
 import com.springboot.bankapp.service.UserService;
 import com.springboot.bankapp.service.VendorService;
@@ -59,6 +60,10 @@ public class BillerController {
 		String username=principal.getName();
 		User user=this.userService.findByUserName(username);
 		
+		AesUtil aesUtil=new AesUtil();
+		String password = aesUtil.decrypt(data.getTransPwd());
+		data.setTransPwd(password);
+		
 		if(!user.getTransPwd().equals(data.getTransPwd())) {
 			throw new Exception("Invalid Password!");
 		}
@@ -71,7 +76,7 @@ public class BillerController {
 		biller.setVendor(vendor);
 		user.getBillerList().add(biller);
 		this.userService.saveUserAfterBenef(user);
-		return ResponseEntity.ok("Beneficiary Added Successfully!");
+		return ResponseEntity.ok("Biller Added Successfully!");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(e.getMessage());
@@ -84,6 +89,10 @@ public class BillerController {
 		try {
 			String username=principal.getName();
 			User user=this.userService.findByUserName(username);
+			
+			AesUtil aesUtil=new AesUtil();
+			String password = aesUtil.decrypt(data.getTransPwd());
+			data.setTransPwd(password);
 			
 			if(!user.getTransPwd().equals(data.getTransPwd())) {
 				throw new Exception("Invalid Password!");
