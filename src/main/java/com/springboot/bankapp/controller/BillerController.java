@@ -72,8 +72,15 @@ public class BillerController {
 		biller.setMobNo(data.getMobNo());
 		biller.setElectricbillNo(data.getElectricbillNo());
 		biller.setPremiumNo(data.getPremiumNo());
+		biller.setCustomerId(data.getCustomerId());
 		Vendor vendor=this.vendorService.getVendorById(vid);
 		biller.setVendor(vendor);
+		if(biller.getVendor().getCategory().equals("Insurance")) {
+			biller.setCustomerId(data.getPremiumNo());
+		}
+		/*if(biller.getVendor().getCategory().equals("Mobile_Recharge")) {
+			biller.setCustomerId(data.getMobNo());
+		}*/
 		user.getBillerList().add(biller);
 		this.userService.saveUserAfterBenef(user);
 		return ResponseEntity.ok("Biller Added Successfully!");
