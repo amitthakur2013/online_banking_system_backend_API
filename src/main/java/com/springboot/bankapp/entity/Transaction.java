@@ -33,6 +33,9 @@ public class Transaction implements Serializable{
 	@Column(name="Status",nullable = false)
 	private String status;
 	
+	@Column(name="trans_mode")
+	private String transMode;
+	
 	@Column(name="Created_On",nullable = false)
 	private String createdOn;
 	
@@ -62,14 +65,16 @@ public class Transaction implements Serializable{
 	public Transaction() {
 	}
 
-	public Transaction(long transId, long refNo, double amount, String remark, String status, String createdOn,
-			double availBal, long fromAccountNo, int fromUserId, Benificiary benificiary, String trans_type,
-			String biller) {
+	public Transaction(long transId, long refNo, double amount, String remark, String status, String transMode,
+			String createdOn, double availBal, long fromAccountNo, int fromUserId, Benificiary benificiary,
+			String trans_type, String biller) {
+		super();
 		this.transId = transId;
 		this.refNo = refNo;
 		this.amount = amount;
 		this.remark = remark;
 		this.status = status;
+		this.transMode = transMode;
 		this.createdOn = createdOn;
 		this.availBal = availBal;
 		this.fromAccountNo = fromAccountNo;
@@ -77,6 +82,15 @@ public class Transaction implements Serializable{
 		this.benificiary = benificiary;
 		this.trans_type = trans_type;
 		this.biller = biller;
+	}
+
+
+	public String getTransMode() {
+		return transMode;
+	}
+
+	public void setTransMode(String transMode) {
+		this.transMode = transMode;
 	}
 
 	public long getTransId() {
