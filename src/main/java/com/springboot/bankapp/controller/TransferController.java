@@ -80,6 +80,7 @@ public class TransferController {
 				transaction.setRefNo(refGenerator.generateRefNo(transaction.getTransId()));
 				transaction.setCreatedOn(refGenerator.getCurrentDateTime()); 
 				transaction.setTrans_type("Fund_Transfer");
+				transaction.setTransMode("debit");
 				transaction.setBiller("");
 				Benificiary benif=this.beneficiaryService.getBeneficiaryDetails(fundData.getToBenifId());
 				List tm=new ArrayList<>();

@@ -72,6 +72,7 @@ public class OrderController {
 				transaction.setRefNo(refGenerator.generateRefNo(transaction.getTransId()));
 				transaction.setCreatedOn(refGenerator.getCurrentDateTime()); 
 				transaction.setTrans_type("Bill_Payment");
+				transaction.setTransMode("debit");
 				transaction.setBiller(fundData.getBiller());
 				this.transactionService.saveTransaction(transaction);
 				TransStatus ts=new TransStatus("success","Your Transaction is Successfull!",String.valueOf(transaction.getRefNo()));
